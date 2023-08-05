@@ -33,14 +33,14 @@ public class Main {
                 System.out.println("The answer is between " + (answer - 10) + " and " + (answer + 10) + " [Guesses: " + (guesses - 1) + "]");
             } else {
 
+                int guess;
                 try {
-                    Integer.parseInt(input);
+                    guess = Integer.parseInt(input);
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input! Please enter a number between 1 and 100!");
                     continue;
                 }
 
-                int guess = Integer.parseInt(input);
                 if (guess == answer) {
                     System.out.println("You guessed correctly!");
                     break;
