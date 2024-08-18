@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class Main {
 
     private static final Scanner keyboard = new Scanner(System.in);
-    private static ArrayList<String> history = new ArrayList<>();
     private static final String RESET = "\033[0m";
 
     public static void main(String[] args) {
@@ -21,6 +20,9 @@ public class Main {
             System.out.println("7. EXIT");
 
             String operationString = keyboard.nextLine();
+            if ("7".equals(operationString)) {
+                break;
+            }
 
             int operation = Integer.parseInt(operationString);
 
@@ -45,34 +47,26 @@ public class Main {
 
             switch (operation) {
                 case 1:
-                    history.add("The sum is: " + (num1 + num2));
                     sendMessage(Color.GREEN, "The sum is: " + (num1 + num2));
                     break;
                 case 2:
-                    history.add("The difference is: " + (num1 - num2));
                     sendMessage(Color.GREEN, "The difference is: " + (num1 - num2));
                     break;
                 case 3:
-                    history.add("The product is: " + (num1 * num2));
                     sendMessage(Color.GREEN, "The product is: " + (num1 * num2));
                     break;
                 case 4:
                     if (num2 == 0) {
                         sendMessage(Color.RED, "Error! Division by zero is not allowed");
                     } else {
-                        history.add("The quotient is: " + (num1 / num2));
                         sendMessage(Color.GREEN, "The quotient is: " + (num1 / num2));
                     }
                     break;
                 case 5:
-                    history.add("The square root of " + num1 + " is: " + Math.sqrt(num1));
                     sendMessage(Color.GREEN, "The square root of " + num1 + " is: " + Math.sqrt(num1));
                     break;
                 case 6:
-                    history.add("The logarithm (base 10) of " + num1 + " is: " + Math.log10(num1));
                     sendMessage(Color.GREEN, "The logarithm (base 10) of " + num1 + " is: " + Math.log10(num1));
-                    break;
-                case 7:
                     break;
                 default:
                     sendMessage(Color.RED, "Invalid operation. Please select a valid operation.");
