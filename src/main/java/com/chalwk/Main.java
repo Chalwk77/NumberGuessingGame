@@ -1,61 +1,104 @@
 package com.chalwk;
 
-import java.util.Random;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    
+
+    private static final Scanner keyboard = new Scanner(System.in);
+    private static ArrayList<String> history = new ArrayList<>();
+    private static final String RESET = "\033[0m";
+
     public static void main(String[] args) {
-
-        Scanner keyboard = new Scanner(System.in);
-
-        int min = 0;
-        int max = 1000;
-
-        Random num = new Random();
-
-        int answer = num.nextInt(max - min + 1) + min;
-        int guesses = 10;
-
-        System.out.println("Welcome to the guessing game!");
-        System.out.println("Type \"hint\" for a hint or \"quit\" to quit the game.");
-        System.out.println(" ");
-        System.out.println("Enter your guess (" + min + "-" + max + "):");
-
         while (true) {
+            System.out.println("Select an operation to perform:");
+            System.out.println("1. ADD (+)");
+            System.out.println("2. SUBTRACT (-)");
+            System.out.println("3. MULTIPLY (*)");
+            System.out.println("4. DIVIDE (/)");
+            System.out.println("5. SQUARE ROOT (sqrt)");
+            System.out.println("6. Logarithm (base 10)");
+            System.out.println("7. EXIT");
 
-            String input = keyboard.nextLine();
+            String operationString = keyboard.nextLine();
 
-            if (input.equals("quit")) {
-                System.out.println("You have quit the game!");
-                break;
-            } else if (input.equals("hint")) {
-                System.out.println("The answer is between " + (answer - 10) + " and " + (answer + 10) + " [Guesses: " + (guesses - 1) + "]");
-            } else {
+            int operation = Integer.parseInt(operationString);
 
-                int guess;
+            double num1, num2 = 0;
+            try {
+                sendMessage(Color.GREEN, "Enter first number: ");
+                num1 = getNumericInput();
+            } catch (NumberFormatException e) {
+                sendMessage(Color.RED, "Invalid first number. Please enter a valid number.");
+                continue;
+            }
+
+            if (operation != 5 && operation != 6) {
                 try {
-                    guess = Integer.parseInt(input);
+                    sendMessage(Color.GREEN, "Enter second number: ");
+                    num2 = getNumericInput();
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid input! Please enter a number between 1 and 100!");
+                    sendMessage(Color.RED, "Invalid second number. Please enter a valid number.");
                     continue;
                 }
-
-                if (guess == answer) {
-                    System.out.println("You guessed correctly!");
-                    break;
-                } else if (guess > answer) {
-                    System.out.println("Guess too high! [Guesses: " + (guesses - 1) + "]");
-                } else {
-                    System.out.println("Guess too low! [Guesses: " + (guesses - 1) + "]");
-                }
-
-                guesses--;
-                if (guesses == 0) {
-                    System.out.println("GAME OVER - You have run out of guesses!");
-                    break;
-                }
             }
+
+            switch (operation) {
+                case 1:
+                    history.add("The sum is: " + (num1 + num2));
+                    sendMessage(Color.GREEN, "The sum is: " + (num1 + num2));
+                    break;
+                case 2:
+                    history.add("The difference is: " + (num1 - num2));
+                    sendMessage(Color.GREEN, "The difference is: " + (num1 - num2));
+                    break;
+                case 3:
+                    history.add("The product is: " + (num1 * num2));
+                    sendMessage(Color.GREEN, "The product is: " + (num1 * num2));
+                    break;
+                case 4:
+                    if (num2 == 0) {
+                        sendMessage(Color.RED, "Error! Division by zero is not allowed");
+                    } else {
+                        history.add("The quotient is: " + (num1 / num2));
+                        sendMessage(Color.GREEN, "The quotient is: " + (num1 / num2));
+                    }
+                    break;
+                case 5:
+                    history.add("The square root of " + num1 + " is: " + Math.sqrt(num1));
+                    sendMessage(Color.GREEN, "The square root of " + num1 + " is: " + Math.sqrt(num1));
+                    break;
+                case 6:
+                    history.add("The logarithm (base 10) of " + num1 + " is: " + Math.log10(num1));
+                    sendMessage(Color.GREEN, "The logarithm (base 10) of " + num1 + " is: " + Math.log10(num1));
+                    break;
+                case 7:
+                    break;
+                default:
+                    sendMessage(Color.RED, "Invalid operation. Please select a valid operation.");
+            }
+        }
+    }
+
+    private static double getNumericInput() {
+        return Double.parseDouble(keyboard.nextLine());
+    }
+
+    private static void sendMessage(Color color, String message) {
+        System.out.println(color.getCode() + message + RESET);
+    }
+
+    private enum Color {
+        RED("\033[31m"), GREEN("\033[32m"), YELLOW("\033[33m"), BLUE("\033[34m"), MAGENTA("\033[35m");
+
+        private final String code;
+
+        Color(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
         }
     }
 }
